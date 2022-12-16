@@ -68,7 +68,7 @@ Volume2D load_raw_volume(const std::string &fname,
     // float old_range = volume.range.y - volume.range.x;
     // float new_range = 2.f;
 
-    // float b = 1.f / (volume.range.y - volume.range.x) * 255.f;
+    // // float b = 1.f / (volume.range.y - volume.range.x) * 255.f;
     // std::vector<float> &voxels = *volume.voxel_data;
     // for(int i = 0; i < volume.n_voxels(); ++i){
     //     float a = (((voxels[i] - volume.range.x) * new_range) / old_range) + -1.f;
