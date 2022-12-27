@@ -4,3 +4,4 @@ datasets/
 envs/
 **/__pycache__/
 **/runs/
+**/checkpoints/
