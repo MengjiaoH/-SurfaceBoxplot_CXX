@@ -12,13 +12,13 @@ class LoadData(Dataset):
         self.data_dir = data_dir 
         self.data = np.loadtxt(data_dir)
         self.l = self.data.shape[1]
-        depths = self.data[:, self.l - 1]
-        minDepth = np.min(depths)
-        maxDepth = np.max(depths)
-        minval = -1
-        maxval = 1
-        self.data[:, self.l - 1] = (((self.data[:, self.l-1] - minDepth) * (maxval - minval)) / (maxDepth- minDepth)) + minval
-        print(np.min(self.data[:, self.l-1]), np.max(self.data[:, self.l-1]))
+        # depths = self.data[:, self.l - 1]
+        # minDepth = np.min(depths)
+        # maxDepth = np.max(depths)
+        # minval = -1
+        # maxval = 1
+        # self.data[:, self.l - 1] = (((self.data[:, self.l-1] - minDepth) * (maxval - minval)) / (maxDepth- minDepth)) + minval
+        # print(np.min(self.data[:, self.l-1]), np.max(self.data[:, self.l-1]))
     def __len__(self):
         return self.data.shape[0]
     

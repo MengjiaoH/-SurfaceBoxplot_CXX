@@ -21,7 +21,7 @@ int main(int argc, const char** argv)
     const vec2i dims = vec2i(std::atoi(argv[3]), std::atoi(argv[4]));
     const std::string voxel_type = "float32";
     const int selected_members = std::atoi(argv[5]);
-    std::string outfile = "./training_data.txt";
+    std::string outfile = argv[6];
     // std::cout << dims.x << " " << dims.y << "\n";
 
     std::vector<Volume2D> volumes(n_members); // save all members in this vector 
@@ -38,34 +38,35 @@ int main(int argc, const char** argv)
     auto stop_loading = high_resolution_clock::now();
     auto duration_loading = duration_cast<milliseconds>(stop_loading - start_loading);
     std::cout << "Loading ensember data costs " << duration_loading.count() << " ms." << std::endl;
-
-    // Find the range over all members 
-    vec2f range = vec2f(1000000.f, -1000000.f);
-    for(int n = 0; n < n_members; ++n){
-        vec2f range_temp = volumes[n].range;
-        if(range_temp.x < range.x){
-            range.x = range_temp.x;
-        }
-        if(range_temp.y > range.y){
-            range.y = range_temp.y;
-        }
-    }
-    std::cout << "Overall range is " << range.x << " " << range.y << "\n";
+    
     int n_voxels = volumes[0].n_voxels(); // number of voxels
-    // Normalize to [-1 , 1]
-    float minval = -1.f;
-    float maxval = 1.f;
-    for(int n = 0; n < n_members; ++n){
-        Volume2D volume = volumes[n];
-        std::vector<float> &voxels = *volume.voxel_data;
-        for(int i = 0; i < n_voxels; ++i){
-            float a = (((voxels[i] - range.x) * (maxval - minval)) / (range.y - range.x)) + minval;
-            voxels[i] = a;
-        }
-        float x = *std::min_element(volume.voxel_data->begin(), volume.voxel_data->end());
-        float y = *std::max_element(volume.voxel_data->begin(), volume.voxel_data->end());
-        std::cout << "volume new range: " << x << " " << y << std::endl;
-    }
+    // // Find the range over all members 
+    // vec2f range = vec2f(1000000.f, -1000000.f);
+    // for(int n = 0; n < n_members; ++n){
+    //     vec2f range_temp = volumes[n].range;
+    //     if(range_temp.x < range.x){
+    //         range.x = range_temp.x;
+    //     }
+    //     if(range_temp.y > range.y){
+    //         range.y = range_temp.y;
+    //     }
+    // }
+    // std::cout << "Overall range is " << range.x << " " << range.y << "\n";
+    
+    // // Normalize to [-1 , 1]
+    // float minval = -1.f;
+    // float maxval = 1.f;
+    // for(int n = 0; n < n_members; ++n){
+    //     Volume2D volume = volumes[n];
+    //     std::vector<float> &voxels = *volume.voxel_data;
+    //     for(int i = 0; i < n_voxels; ++i){
+    //         float a = (((voxels[i] - range.x) * (maxval - minval)) / (range.y - range.x)) + minval;
+    //         voxels[i] = a;
+    //     }
+    //     float x = *std::min_element(volume.voxel_data->begin(), volume.voxel_data->end());
+    //     float y = *std::max_element(volume.voxel_data->begin(), volume.voxel_data->end());
+    //     std::cout << "volume new range: " << x << " " << y << std::endl;
+    // }
     
 
     

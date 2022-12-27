@@ -2,3 +2,7 @@ build/
 .vscode/
 datasets/
 envs/
+**/__pycache__/
+**/runs/       
+**/checkpoints/
+**/models/

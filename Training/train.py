@@ -11,10 +11,10 @@ from network import SirenNet
 from utils import EarlyStopping, LRScheduler
 
 lr = 1e-04
-batch_size = 100
+batch_size = 1000
 nepochs = 100
 use_lr_scheduler = True
-train_data_path = "../build/training_data.txt"
+train_data_path = "./datasets/training_data.npy"
 start_epoch = 0
 data_set = "wind_pressure_200_22"
 
@@ -46,7 +46,7 @@ train_dataset, test_dataset = torch.utils.data.random_split(dataset, [train_size
 train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=4, drop_last=False)
 test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True, num_workers=4, drop_last=False)
 
-model = SirenNet(15, 512, 1, 4)
+model = SirenNet(15, 1024, 1, 6)
 if torch.cuda.device_count() > 1:
     model = torch.nn.DataParallel(model)
 model = model.to(device)
