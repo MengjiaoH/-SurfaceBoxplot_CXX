@@ -6,3 +6,4 @@ envs/
 **/runs/       
 **/checkpoints/
 **/models/
+**/*.txt

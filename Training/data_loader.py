@@ -26,13 +26,13 @@ class LoadData(Dataset):
         np.random.seed(seed = int(time.time() + index))
         data = self.data[index, :]
         
-        #input_data = torch.FloatTensor(data[0:self.l-1])
+        input0 = torch.FloatTensor(data[0:self.l-1])
         
-        input0 = torch.FloatTensor([data[0]])
-        input1 = torch.FloatTensor(data[1:self.l-1])
+        # input0 = torch.FloatTensor([data[0]])
+        # input1 = torch.FloatTensor(data[1:self.l-1])
         output_data = torch.FloatTensor([data[self.l-1]])
         
-        return input0, input1, output_data
+        return input0, output_data
     
 
 if __name__ == "__main__":

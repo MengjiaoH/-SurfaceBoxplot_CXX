@@ -18,11 +18,12 @@ int main(int argc, const char** argv)
 {
     std::string dataPath = argv[1]; // the path to the ensemble data 
     int n_members = std::atoi(argv[2]); // the number of memebers 
-    const vec2i dims = vec2i(std::atoi(argv[3]), std::atoi(argv[4]));
+    const vec2i dims = vec2i(std::atoi(argv[3]), std::atoi(argv[4])); // data dimensions 
     const std::string voxel_type = "float32";
-    const int selected_members = std::atoi(argv[5]);
-    std::string outfile = argv[6];
+    const int selected_members = std::atoi(argv[5]); // number of j 
+    std::string outfile = argv[6]; // directory to save training data
     // std::cout << dims.x << " " << dims.y << "\n";
+    std::cout << "File: " << dataPath << "\n";
 
     std::vector<Volume2D> volumes(n_members); // save all members in this vector 
 
@@ -40,6 +41,7 @@ int main(int argc, const char** argv)
     std::cout << "Loading ensember data costs " << duration_loading.count() << " ms." << std::endl;
     
     int n_voxels = volumes[0].n_voxels(); // number of voxels
+    
     // // Find the range over all members 
     // vec2f range = vec2f(1000000.f, -1000000.f);
     // for(int n = 0; n < n_members; ++n){
@@ -53,6 +55,7 @@ int main(int argc, const char** argv)
     // }
     // std::cout << "Overall range is " << range.x << " " << range.y << "\n";
     
+    // vec2f range = vec2f(-43.94668, 113.6984);
     // // Normalize to [-1 , 1]
     // float minval = -1.f;
     // float maxval = 1.f;
@@ -74,7 +77,7 @@ int main(int argc, const char** argv)
     // remove the index 
     std::vector<int> indices_temp(n_members);
     std::iota(indices_temp.begin(), indices_temp.end(), 0); 
-    indices_temp.erase(indices_temp.begin() + 0);
+    // indices_temp.erase(indices_temp.begin() + 0);
     find_combinations(indices_temp, indices_temp.size(), selected_members, combinations_temp);
     int n_combinations = combinations_temp.size();
     std::cout << "Select " << selected_members << " members." << "\n";
@@ -87,12 +90,13 @@ int main(int argc, const char** argv)
     for(int n = 0; n < n_members; n++){
         Volume2D cur_volume = volumes[n];
         auto cur_voxels = *(cur_volume.voxel_data);
+        float total_depth = 0.f;
         // find combinations
         std::vector<std::vector<int>> combinations;
         // remove the index 
         std::vector<int> indices(n_members);
         std::iota(indices.begin(), indices.end(), 0); 
-        indices.erase(indices.begin() + n);
+        // indices.erase(indices.begin() + n);
         find_combinations(indices, indices.size(), selected_members, combinations);
         
         for(int i = 0; i < n_voxels; ++i){
@@ -107,7 +111,7 @@ int main(int argc, const char** argv)
                 }
             }
 
-            int depth = 0;  
+            float depth = 0;  
             for(int c = 0; c < combinations.size(); c++){
                 std::vector<int> combination = combinations[c];
                 float minval = 1000000;
@@ -124,12 +128,17 @@ int main(int argc, const char** argv)
                     }
                 }
                 if ((cur_data_value >= minval) && (cur_data_value <= maxval)){
-                   depth += 1;
+                   depth += 1.f;
                 }
             }// for all combinations
+            // depth = (depth / (float)combinations.size()) / ((float) 240 * 121);
+
+            // std::cout << "depth: " << depth << "\n";
             temp_data.push_back(depth);
             training_data.push_back(temp_data);
+            total_depth = total_depth + depth;
         }// for each voxel
+        std::cout << "total depth: " << n << " " << total_depth << "\n";
         
     } // end of all members
     std::cout << "training data size: " << training_data.size() << "\n";
